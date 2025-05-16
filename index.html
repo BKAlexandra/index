@@ -8,7 +8,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f9f9f9;
       color: #333;
-      padding: 2em;
+      padding: 2em 1em;
       max-width: 800px;
       margin: auto;
     }
@@ -16,11 +16,14 @@
     h1 {
       text-align: center;
       color: #d60000;
+      font-size: 1.8em;
     }
 
     img.logo {
       display: block;
       margin: 0 auto 1em auto;
+      max-width: 100%;
+      height: auto;
       width: 150px;
     }
 
@@ -39,7 +42,7 @@
 
     button {
       padding: 0.75em 1.5em;
-      margin-right: 0.5em;
+      margin-bottom: 0.5em;
       background: #d60000;
       color: white;
       border: none;
@@ -47,22 +50,35 @@
       font-size: 1em;
       cursor: pointer;
       transition: background 0.3s ease;
+      width: 100%;
+      max-width: 200px;
     }
 
     button:hover {
       background: #a50000;
     }
 
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em;
+      justify-content: center;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 2em;
+      font-size: 0.95em;
+      overflow-x: auto;
+      display: block;
     }
 
     th, td {
       border: 1px solid #ddd;
       padding: 0.75em;
       text-align: left;
+      white-space: nowrap;
     }
 
     th {
@@ -72,11 +88,25 @@
     #result p {
       font-weight: bold;
       color: #008000;
+      text-align: center;
     }
 
     @media (max-width: 600px) {
       textarea {
         height: 150px;
+      }
+
+      h1 {
+        font-size: 1.5em;
+      }
+
+      button {
+        font-size: 1em;
+        padding: 0.6em 1em;
+      }
+
+      th, td {
+        font-size: 0.9em;
       }
     }
   </style>
@@ -90,9 +120,11 @@
   <p>A program felismeri a termék nevét és kiszámolja, mennyi hiányzik.</p>
 
   <textarea id="inputData" placeholder="Ide másold az adatokat..."></textarea>
-  <br>
-  <button onclick="processData()">Összesítés</button>
-  <button onclick="clearData()">Törlés</button>
+
+  <div class="button-container">
+    <button onclick="processData()">Összesítés</button>
+    <button onclick="clearData()">Törlés</button>
+  </div>
 
   <div id="result"></div>
 
