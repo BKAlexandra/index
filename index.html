@@ -45,7 +45,7 @@
       margin-bottom: 0.8em;
     }
 
-textarea {
+    textarea {
       width: 100%;
       height: 200px;
       padding: 1em;
@@ -56,6 +56,8 @@ textarea {
       box-sizing: border-box;
       background: #fff;
       margin-bottom: 1em;
+      overflow-x: auto;
+      white-space: pre;
     }
 
     .button-container {
@@ -144,7 +146,8 @@ textarea {
   <p>Illessz be az adatokat az alábbi mezőbe, majd kattints az <strong>Összesítés</strong> gombra.</p>
   <p>A program felismeri a termék nevét és kiszámolja, mennyi hiányzik.</p>
 
-  <textarea id="inputData" placeholder="Ide másold az adatokat..."></textarea>
+  <!-- wrap="off" itt a kulcs -->
+  <textarea id="inputData" placeholder="Ide másold az adatokat..." wrap="off"></textarea>
 
   <div class="button-container">
     <button onclick="processData()">Összesítés</button>
