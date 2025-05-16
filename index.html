@@ -6,81 +6,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    :root {
-      --primary: #d60000;
-      --primary-dark: #a50000;
-      --text: #333;
-      --bg: #f9f9f9;
-      --table-header: #eee;
-    }
-
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 2em 1em;
+      background: #f9f9f9;
+      color: #333;
+      padding: 1.5em;
       max-width: 800px;
       margin: auto;
-      font-size: 1.1rem;
+      font-size: 18px;
+      line-height: 1.6;
     }
 
     h1 {
       text-align: center;
-      color: var(--primary);
+      color: #d60000;
       font-size: 2rem;
-      margin-bottom: 1em;
+      margin-bottom: 1rem;
     }
 
     img.logo {
       display: block;
-      margin: 0 auto 1.5em auto;
-      max-width: 100%;
-      height: auto;
-      width: 180px;
-    }
-
-    p {
-      font-size: 1rem;
-      line-height: 1.6;
-      margin-bottom: 0.8em;
+      margin: 0 auto 1em auto;
+      width: 150px;
     }
 
     textarea {
       width: 100%;
-      height: 220px;
-      padding: 1em;
+      height: 300px;
+      padding: 1.2em;
       border: 2px solid #ccc;
       border-radius: 10px;
       font-size: 1.1rem;
       resize: vertical;
       box-sizing: border-box;
       background: #fff;
-      margin-bottom: 1.5em;
-    }
-
-    .button-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1em;
-      align-items: center;
-      margin-bottom: 2em;
+      margin-bottom: 1em;
     }
 
     button {
       padding: 1em 2em;
-      background: var(--primary);
+      margin-bottom: 1em;
+      background: #d60000;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 1.2rem;
       cursor: pointer;
-      transition: background 0.3s ease;
       width: 100%;
-      max-width: 300px;
     }
 
     button:hover {
-      background: var(--primary-dark);
+      background: #a50000;
     }
 
     table {
@@ -94,44 +70,45 @@
 
     th, td {
       border: 1px solid #ddd;
-      padding: 1em;
+      padding: 0.75em;
       text-align: left;
-      white-space: nowrap;
+      white-space: normal;
     }
 
     th {
-      background-color: var(--table-header);
-      font-weight: bold;
+      background-color: #eee;
     }
 
     #result p {
       font-weight: bold;
-      color: green;
-      text-align: center;
-      font-size: 1.2rem;
+      color: #008000;
     }
 
     @media (max-width: 600px) {
       body {
-        font-size: 1.05rem;
+        padding: 1em;
+        font-size: 1rem;
       }
 
       h1 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+      }
+
+      textarea {
+        height: 350px;
+        font-size: 1rem;
       }
 
       button {
         font-size: 1.1rem;
-        padding: 1em;
-      }
-
-      textarea {
-        height: 180px;
-        font-size: 1rem;
       }
 
       table {
         font-size: 0.95rem;
+      }
+
+      th, td {
+        padding: 0.6em;
       }
     }
   </style>
@@ -146,10 +123,8 @@
 
   <textarea id="inputData" placeholder="Ide másold az adatokat..."></textarea>
 
-  <div class="button-container">
-    <button onclick="processData()">Összesítés</button>
-    <button onclick="clearData()">Törlés</button>
-  </div>
+  <button onclick="processData()">Összesítés</button>
+  <button onclick="clearData()">Törlés</button>
 
   <div id="result"></div>
 
@@ -176,20 +151,27 @@
 
       lines.forEach(line => {
         const parts = line.split(/\t+/);
-        const name = parts.find(p => isNaN(parseFloat(p)));
         const last = parts[parts.length - 1];
         const match = last.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
-        if (!match || !name) return;
+        if (!match) return;
 
         const current = Math.max(0, parseFloat(match[1]));
         const max = parseFloat(match[2]);
         const needToFill = Math.max(0, max - current);
 
+        // Terméknév és kód szétválasztása
+        const nameCodeRaw = parts.find(p => isNaN(parseFloat(p)));
+        const nameCodeMatch = nameCodeRaw?.match(/^([^\d]+)(\d+.*)$/);
+        const name = nameCodeMatch ? nameCodeMatch[1] : nameCodeRaw || "Ismeretlen";
+        const code = nameCodeMatch ? nameCodeMatch[2] : "";
+
+        const displayName = code ? `${name} (${code})` : name;
+
         if (needToFill > 0) {
-          if (!products[name]) {
-            products[name] = 0;
+          if (!products[displayName]) {
+            products[displayName] = 0;
           }
-          products[name] += needToFill;
+          products[displayName] += needToFill;
         }
       });
 
